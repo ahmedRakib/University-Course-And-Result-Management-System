@@ -1,0 +1,37 @@
+﻿@model IEnumerable<UniversityCourseAndResultManagementSystem.Models.Department>
+
+@{
+    ViewBag.Title = "ViewAllDepartment";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@*<ul class="links" style="margin-left: 25%">
+    <li>@Html.ActionLink("Save", "Save")</li>
+    <li>@Html.ActionLink("View All Department", "ViewAllDepartment")</li>
+    <li>@Html.ActionLink("Save Teacher", "SaveTeacher")</li>
+</ul>*@
+<br/>
+<h4 align="center">All Departments List</h4>
+<hr/>
+<table class="table table-bordered table-hover">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Code)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.DepartmentName)
+        </th>
+    </tr>
+@foreach (var department in ViewBag.Departments)
+{
+    <tr>
+        <td>
+            @department.Code
+        </td>
+        <td>
+            @department.DepartmentName
+        </td>
+    </tr>
+}
+
+</table>

@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "SaveStudentResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<ul class="links" style="padding-left: 20%">
+    <li>@Html.ActionLink("Save Student", "RegisterStudent", "Student")</li>
+    <li>@Html.ActionLink("Enroll in a Course", "EnrollInACourse", "Student")</li>
+    <li>@Html.ActionLink("Save Student Result", "SaveStudentResult", "Student")</li>
+    <li>@Html.ActionLink("View Result", "ViewResult", "Student")</li>
+</ul>*@
+<br/>
+<h3 align="center">Save Student Result</h3>
+<hr/>
+@using (Html.BeginForm(null, null, FormMethod.Post, new {id = "saveResultForm"}))
+{
+    <table align="center">
+        <tr>
+            <td><label for="StudentId">Student Reg. No.</label></td>
+            <td>
+                <select id="StudentId" name="StudentId" class="form-control">
+                    <option value="">--Select Registration No--</option>
+                    @foreach (var student in ViewBag.students)
+                    {
+                        <option value=@student.Id>@student.RegistrationNo</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="Name">Name</label></td>
+            <td><input type="text" id="Name" name="Name" class="form-control" readonly /></td>
+        </tr>
+        <tr>
+            <td><label for="Email">Email</label></td>
+            <td><input type="text" id="Email" name="Email" class="form-control" readonly /></td>
+        </tr>
+        <tr>
+            <td><label for="Department">Department</label></td>
+            <td><input type="text" id="Department" name="Department" class="form-control" readonly /></td>
+        </tr>
+        <tr>
+            <td><label for="CourseId">Select Course</label></td>
+            <td>
+                <select id="CourseId" name="CourseId" class="form-control"></select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="GradeId">Select Grade Letter</label></td>
+            <td>
+                <select id="GradeId" name="GradeId" class="form-control">
+                    <option value="">--Select Grade Letter--</option>
+                    @foreach (var grade in ViewBag.grades)
+                    {
+                        <option value=@grade.Id>@grade.GradeLetter</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Save" class="btn btn-default"/></td>
+        </tr>
+    </table>
+    if (ViewBag.Message != String.Empty)
+    {
+        <p>@ViewBag.Message</p>
+    }
+}
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+            $("#StudentId").change(function() {
+                var studentId = $("#StudentId").val();
+                $("#Name").val("");
+                $("#Email").val("");
+                $("#Department").val("");
+                $("#CourseId").empty();
+                var studentdata = { studentId: studentId };
+                $.ajax({
+                    type: "POST",
+                    url: "/Student/GetStudentDataById/",
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(studentdata),
+                    success: function(data) {
+                        $("#Name").val(data.Student.Name);
+                        $("#Email").val(data.Student.Email);
+                        $("#Department").val(data.Student.DepartmentName);
+                        $("#CourseId").append('<option value=' + "" + '>' + "--Select Course--" + '</option>');
+                        $.each(data.Courses, function (key, value) {
+                            $("#CourseId").append('<option value=' + value.CourseId + '>' + value.CourseCode + '</option>');
+                        });
+                    }
+                });
+            });
+            $("#saveResultForm").validate({
+                rules: {
+                    StudentId: "required",
+                    CourseId: "required",
+                    GradeId : "required"
+                },
+                messages: {
+                    StudentId: "Please Select a student.",
+                    CourseId: "Please select a course",
+                    GradeId : "Please select a grade"
+                }
+            });
+        });
+    </script>
+}
+

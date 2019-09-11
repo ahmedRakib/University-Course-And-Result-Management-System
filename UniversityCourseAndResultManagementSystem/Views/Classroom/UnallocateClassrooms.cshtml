@@ -1,0 +1,33 @@
+﻿@using Microsoft.Ajax.Utilities
+
+@{
+    ViewBag.Title = "UnallocateClassrooms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@*<ul class="links" style="margin-left: 25%">
+    <li>@Html.ActionLink("Allocate Classroom", "AllocateClassrooms")</li>
+    <li>@Html.ActionLink("View Class Schedule", "ViewClassAndRoomSchedule")</li>
+    <li>@Html.ActionLink("Unallocate Rooms", "UnallocateClassrooms")</li>
+</ul>*@
+<br/>
+
+<h3 align="center">Unallocate All Classrooms</h3>
+<hr/>
+@using (Html.BeginForm(null, null, FormMethod.Post))
+{
+    <input type="submit" name="submit" id="submit" class="btn btn-danger btn-lg" value="Unallocate Rooms" style="margin-left: 43%"/>
+}
+@if (ViewBag.Message != String.Empty)
+{
+    <p align="center">@ViewBag.Message</p>
+}
+@section scripts
+{
+    <script type="text/javascript">
+        $().ready(function() {
+            $("#submit").click(function() {
+                return confirm("This will unallocate all the classrooms. Do you want to proceed?");
+            });
+        });
+    </script>
+}

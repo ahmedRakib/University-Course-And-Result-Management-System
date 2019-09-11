@@ -1,0 +1,41 @@
+﻿@using UniversityCourseAndResultManagementSystem.Models
+
+@{
+    ViewBag.Title = "RegisteredStudentDetails";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    StudentWithDepartmentName student = ViewBag.Student;
+}
+
+    <h2 align="center">Registered Student Details</h2>
+    <table class="table table-bordered">
+        <tr>
+            <td><label>Name</label></td>
+            <td><label>@student.Name</label></td>
+        </tr>
+        <tr>
+            <td><label>Registration No</label></td>
+            <td><label>@student.RegNo</label></td>
+        </tr>
+        <tr>
+            <td><label>Email</label></td>
+            <td><label>@student.Email</label></td>
+        </tr>
+        <tr>
+            <td><label>Contact No</label></td>
+            <td><label>@student.Contact</label></td>
+        </tr>
+        <tr>
+            <td><label>Department</label></td>
+            <td><label>@student.DepartmentName</label></td>
+        </tr>
+        <tr>
+            <td><label>Address</label></td>
+            <td><label>@student.Address</label></td>
+        </tr>
+        <tr>
+            <td><label>Registration Date</label></td>
+            <td><label>@student.Date</label></td>
+        </tr>
+    </table>
+

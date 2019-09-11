@@ -1,0 +1,83 @@
+﻿@using System.Collections.Specialized
+@model UniversityCourseAndResultManagementSystem.Models.Department
+@{
+    ViewBag.Title = "ViewCourse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    <link href="~/Content/DataTables/css/jquery.dataTables.css" rel="stylesheet" />
+}
+@*<ul class="links" style="margin-left: 10%">
+    <li>@Html.ActionLink("Save", "SaveCouse")</li>
+    <li>@Html.ActionLink("Course Assign To Teacher", "AssignCourse")</li>
+    <li>@Html.ActionLink("View Course Statics", "ViewCourse")</li>
+    <li>@Html.ActionLink("Unassign All Courses", "UnassignAllCourses")</li>
+</ul>*@
+<br/>
+<h3 align="center">View Course Statics</h3>
+<hr/>
+<table class="form-group" align="center">
+    <tr>
+        <td><label for="DepartmentId">Department</label></td>
+        <td>
+            <select id="DepartmentId" class="form-control">
+                <option value="">--Select Department--</option>
+                @foreach (var department in ViewBag.Departments)
+                {
+                    <option value=@department.Id>@department.DepartmentName</option>
+                }
+            </select>
+        </td>
+    </tr>
+</table>
+<br/>
+<br/>
+<table id="courseDetailsTable" class="table table-bordered table-hover">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Title</th>
+            <th>Semester</th>
+            <th>Assigned to</th>
+        </tr>
+    </thead>
+    <tbody id="viewCourseBody"></tbody>
+</table>
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+            $("#courseDetailsTable").hide();
+            var table = $("#courseDetailsTable").DataTable();
+            $("#DepartmentId").change(function () {
+                var departmentId = $("#DepartmentId").val();
+                $("#courseDetailsTable").show();
+                table.clear().draw();
+                var courseData = { departmentId: departmentId };
+                $.ajax({
+                    type: "POST",
+                    url: '/Course/GetCourseStatics',
+                    contentType: "application/json; charset=utf-8",
+                    data: JSON.stringify(courseData),
+                    success: function(data) {
+                        $.each(data, function(key, value) {
+                            table.row.add(
+                                [
+                                    value.CourseCode,
+                                    value.CourseName,
+                                    value.Semester,
+                                    value.TeacherName
+                                ]
+                            ).draw(false);
+                        });
+                    }
+            });
+            });
+        });
+    </script>
+}
+
+

@@ -1,0 +1,82 @@
+﻿@using UniversityCourseAndResultManagementSystem.Models
+
+
+
+@{
+    Layout = null;
+    ViewBag.Title = "ResultSheet";
+    StudentWithDepartmentName student = ViewBag.Student;
+    List<StudentResultDetails> result = ViewBag.Result;
+}
+
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>ViewResult</title>
+
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+</head>
+<body>
+    <a><img align="middle" src="/images/Harvard-logo-2.jpg" height="480" width="1080"> ></a>
+    <h2 align="center">Harvard University Student's Result</h2>
+    <h4 align="center"><u>Result sheet</u></h4>
+
+    <h5 style="float: right" id="date"></h5>
+
+    <div>
+
+        <table>
+            <tr>
+                <td><label class="col-md-4 control-label">Name</label></td>
+                <td><label class="col-md-4 control-label">@student.Name</label></td>
+            </tr>
+            <tr>
+                <td><label class="col-md-4 control-label">Email</label></td>
+                <td><label class="col-md-4 control-label">@student.Email</label></td>
+            </tr>
+            <tr>
+                <td><label class="col-md-4 control-label">Reg No.</label></td>
+                <td><label class="col-md-4 control-label">@student.RegNo</label></td>
+            </tr>
+            <tr>
+                <td><label class="col-md-4 control-label">Department</label></td>
+                <td><label class="col-md-4 control-label">@student.DepartmentName</label></td>
+            </tr>
+        </table>
+        <br>
+        <br>
+        <p>Course wise grades:</p>
+        <table id="resultTable" class="table table-bordered table-hover">
+            <thead>
+                <tr>
+                    <th>Course Code</th>
+                    <th>Course Name</th>
+                    <th>Grade</th>
+                </tr>
+
+            </thead>
+            <tbody id="tableBody">
+                @foreach (StudentResultDetails studentResult in result)
+                {
+                    <tr>
+                        <td>@studentResult.CourseCode</td>
+                        <td>@studentResult.CourseName</td>
+                        <td>@studentResult.GradeLetter</td>
+                    </tr>
+
+                }
+            </tbody>
+        </table>
+    </div>
+    <script>
+        date = new Date();
+        year = date.getFullYear();
+        month = date.getMonth() + 1;
+        day = date.getDate();
+        document.getElementById("date").innerHTML = "Date: " + day + "/" + month + "/" + year;
+    </script>
+</body>
+</html>

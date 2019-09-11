@@ -1,0 +1,92 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @RenderSection("styles", required: false)
+
+</head>
+<body>
+<div class="titleBar">
+    <h1>University Course And Result Management System</h1>
+</div>
+@*<div class="navbar navbar-default">
+    <div class="container">
+        <div class="navbar-collapse collapse">
+            <ul class="nav navbar-nav">
+                <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                <li>@Html.ActionLink("Department", "Index", "Department")</li>
+                <li>@Html.ActionLink("Course", "Index", "Course")</li>
+                <li>@Html.ActionLink("Student", "Index", "Student")</li>
+                <li>@Html.ActionLink("Classroom", "Index", "Classroom")</li>
+            </ul>
+        </div>
+    </div>
+</div>*@
+    <nav class="navbar navbar-inverse" role="banner">
+        <div class="container">
+
+            <div class="collapse navbar-collapse navbar-center">
+                <ul class="nav navbar-nav">
+                    <li>@Html.ActionLink("Home", "Index", "Home")</li>
+                    @*<li>@Html.ActionLink("Department", "Index", "Department")</li>
+                    <li>@Html.ActionLink("Course", "Index", "Course")</li>
+                    <li>@Html.ActionLink("Student", "Index", "Student")</li>
+                    <li>@Html.ActionLink("Classroom", "Index", "Classroom")</li>*@
+
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Department<i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("Save", "Save", "Department")</li>
+                            <li>@Html.ActionLink("ViewAllDepartment", "ViewAllDepartment", "Department")</li>
+                            <li>@Html.ActionLink("SaveTeacher", "SaveTeacher", "Department")</li>
+                           
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Course<i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("SaveCouse", "SaveCouse", "Course")</li>
+                            <li>@Html.ActionLink("AssignCourse", "AssignCourse", "Course")</li>
+                            <li>@Html.ActionLink("ViewCourse", "ViewCourse", "Course")</li>
+                            <li>@Html.ActionLink("UnassignAllCourses", "UnassignAllCourses", "Course")</li>
+                            </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Student<i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("RegisterStudent", "RegisterStudent", "Student")</li>
+                            <li>@Html.ActionLink("EnrollInACourse", "EnrollInACourse", "Student")</li>
+                            <li>@*@Html.ActionLink("RegisteredStudentDetails", "RegisteredStudentDetails", "Student")*@</li>
+                            <li>@Html.ActionLink("SaveStudentResult", "SaveStudentResult", "Student")</li>
+                            <li>@Html.ActionLink("ViewResult", "ViewResult", "Student")</li>
+                        </ul>
+                    </li>
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Classrooms<i class="fa fa-angle-down"></i></a>
+                        <ul class="dropdown-menu">
+                            <li>@Html.ActionLink("AllocateClassrooms", "AllocateClassrooms", "Classroom")</li>
+                            <li>@Html.ActionLink("ViewClassAndRoomSchedule", "ViewClassAndRoomSchedule", "Classroom")</li>
+                            <li>@Html.ActionLink("UnallocateClassrooms", "UnallocateClassrooms", "Classroom")</li>
+                        </ul>
+                    </li>
+                </ul>
+            </div>
+        </div><!--/.container-->
+    </nav><!--/nav-->
+<div class="container body-content">
+    @RenderBody()
+    <hr/>
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Anonymous</p>
+    </footer>
+</div>
+
+@Scripts.Render("~/bundles/jquery")
+@Scripts.Render("~/bundles/bootstrap")
+@RenderSection("scripts", required: false)
+</body>
+</html>

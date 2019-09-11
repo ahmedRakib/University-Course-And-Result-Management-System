@@ -1,0 +1,101 @@
+﻿@model UniversityCourseAndResultManagementSystem.Models.Student
+
+@{
+    ViewBag.Title = "RegisterStudent";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+}
+@*<ul class="links" style="margin-left: 20%">
+    <li>@Html.ActionLink("Save Student", "RegisterStudent", "Student")</li>
+    <li>@Html.ActionLink("Enroll in a Course", "EnrollInACourse", "Student")</li>
+    <li>@Html.ActionLink("Save Student Result", "SaveStudentResult", "Student")</li>
+    <li>@Html.ActionLink("View Result", "ViewResult", "Student")</li>
+</ul>*@
+<br/>
+<h3 align="center">RegisterStudent</h3>
+<hr/>
+
+@using (Html.BeginForm()) 
+{
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal" style="margin-left: 30% ">
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Name, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Name, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Name)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Email, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Email, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Email)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.ContactNo, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.ContactNo, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.ContactNo)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Date, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBoxFor(model => model.Date, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Date)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.Address, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.Address, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Address)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DepartmentId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DepartmentId, new SelectList(ViewBag.Departments, "Id", "DepartmentName"), "--Select Department--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DepartmentId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Create" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/jquery.validate.unobtrusive.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+            $('#Date').datepicker({
+                format: "yyyy-mm-dd",
+                clearBtn: true,
+                daysOfWeekHighlighted: "6",
+                autoclose: true,
+                todayHighlight: true,
+                orientation: "bottom auto"
+            });
+        });
+    </script>
+}

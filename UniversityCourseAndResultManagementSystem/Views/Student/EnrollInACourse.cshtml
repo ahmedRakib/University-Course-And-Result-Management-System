@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "EnrollInACourse";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    <link href="~/Content/bootstrap-datepicker.css" rel="stylesheet" />
+}
+@*<ul class="links" style="padding-left: 20%">
+    <li>@Html.ActionLink("Save Student", "RegisterStudent", "Student")</li>
+    <li>@Html.ActionLink("Enroll in a Course", "EnrollInACourse", "Student")</li>
+    <li>@Html.ActionLink("Save Student Result", "SaveStudentResult", "Student")</li>
+    <li>@Html.ActionLink("View Result", "ViewResult", "Student")</li>
+</ul>*@
+<br/>
+<h3 align="center">Enroll In A Course</h3>
+<hr/>
+@using (Html.BeginForm(null, null, FormMethod.Post, new {id = "enrollForm"}))
+{
+    <table align="center">
+        <tr>
+            <td><label for="StudentId">Select Reg. No</label></td>
+            <td>
+                <select id="StudentId" name="RegNo" class="form-control">
+                    <option value="">--Select Reg. No--</option>
+                    @foreach (var student in ViewBag.Students)
+                    {
+                        <option value=@student.Id>@student.RegistrationNo</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="name">Name</label></td>
+            <td><input type="text" id="name" name="name" class="form-control" readonly/></td>
+        </tr>
+        <tr>
+            <td><label for="email">Email</label></td>
+            <td><input type="text" id="email" name="email" class="form-control" readonly/></td>
+        </tr>
+        <tr>
+            <td><label for="department">Department</label></td>
+            <td><input type="text" id="department" name="department" class="form-control" readonly/></td>
+        </tr>
+        <tr>
+            <td><label for="CourseId">Select Course</label></td>
+            <td>
+                <select id="CourseId" name="CourseId" class="form-control"></select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="date">Date</label></td>
+            <td><input type="text" id="date" name="date" class="form-control"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Enroll" class="btn btn-default"/></td>
+        </tr>
+    </table>
+    if (ViewBag.Message != String.Empty)
+    {
+        <p class="text-danger">@ViewBag.Message</p>
+    }
+}
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.js"></script>
+    <script src="~/Scripts/bootstrap-datepicker.js"></script>
+    <script type="text/javascript">
+        $().ready(function () {
+            $('#date').datepicker({
+                format: "yyyy-mm-dd",
+                clearBtn: true,
+                daysOfWeekHighlighted: "6",
+                autoclose: true,
+                todayHighlight: true,
+                orientation: "bottom auto"
+            });
+            $("#StudentId").change(function() {
+                var studentId = $("#StudentId").val();
+                $("#name").val("");
+                $("#email").val("");
+                $("#department").val("");
+                $("#CourseId").empty();
+                var student = { studentId: studentId };
+                $.ajax({
+                    type: "POST",
+                    url: '/Student/GetStudentDetails/',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(student),
+                    success: function (data) {
+                        $("#name").val(data.Student.Name);
+                        $("#email").val(data.Student.Email);
+                        $("#department").val(data.Student.DepartmentCode);
+                        $("#CourseId").append('<option value=' + "" + '>' +"--Select Course--"+ '</option>');
+                        $.each(data.Courses, function (key, value) {
+                            $("#CourseId").append('<option value='+value.Id+'>'+value.Code+'</option>');
+                        });
+                    }
+                });
+            });
+            $("#enrollForm").validate({
+                rules: {
+                    RegNo: "required",
+                    CourseId: "required",
+                    date: "required"
+                },
+                messages: {
+                    RegNo: "Please Select a student.",
+                    CourseId: "Please Select a course",
+                    date: "Please Select a date."
+                }
+            });
+        });
+    </script>
+}
+

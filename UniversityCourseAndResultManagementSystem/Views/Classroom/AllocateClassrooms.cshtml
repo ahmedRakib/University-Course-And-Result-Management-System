@@ -1,0 +1,143 @@
+﻿@model UniversityCourseAndResultManagementSystem.Models.AllocateClassroom
+
+@{
+    ViewBag.Title = "AllocateClassrooms";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/github.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-clockpicker.min.css" rel="stylesheet" />
+}
+@*<ul class="links" style="margin-left: 25%">
+    <li>@Html.ActionLink("Allocate Classroom", "AllocateClassrooms")</li>
+    <li>@Html.ActionLink("View Class Schedule", "ViewClassAndRoomSchedule")</li>
+    <li>@Html.ActionLink("Unallocate Rooms", "UnallocateClassrooms")</li>
+</ul>*@
+<br />
+<h3 align="center">Allocate Classrooms</h3>
+<hr />
+
+@using (Html.BeginForm(null, null, FormMethod.Post, new{id="allocateClassroom"})) 
+{    
+    @Html.AntiForgeryToken()
+    
+    <div class="form-horizontal" style="margin-left: 30%">
+        @Html.ValidationSummary(true)
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DepartmentId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DepartmentId, new SelectList(ViewBag.Departments, "Id", "DepartmentName"), "--Select Department--", new{@class="form-control"})
+                @Html.ValidationMessageFor(model => model.DepartmentId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CourseId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                <select id="CourseId" name="CourseId" class="form-control">
+                    
+                </select>
+                @Html.ValidationMessageFor(model => model.CourseId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.RoomId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.RoomId, new SelectList(ViewBag.Classrooms, "Id", "RoomNo"), "--Select Room--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.RoomId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.DayId, new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.DayId, new SelectList(ViewBag.Days, "Id", "DayName"), "--Select Day--", new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.DayId)
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="FromTime">From</label>
+            <div class="col-sm-6">
+                <div id="FromTime" data-placement="left" data-align="top" data-autoclose="true">
+                    <input type="text" id="FromTime" name="FromTime" value ="10:00" class="form-control">
+                </div>
+            </div>
+        </div>
+
+
+        <div class="form-group">
+            <label class="control-label col-sm-2" for="ToTime">To</label>
+            <div class="col-sm-6">
+                <div id="ToTime" data-placement="left" data-align="top" data-autoclose="true">
+                    <input type="text" id="ToTime" name="ToTime" value="12:00" class="form-control">
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Allocate" class="btn btn-default" />
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.Message != String.Empty)
+{
+    <p align="center">@ViewBag.Message</p>
+}
+
+@section scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/jquery.timepicker.min.js"></script>
+    <script src="~/Scripts/bootstrap-datetimepicker.js"></script>
+    <script src="~/Scripts/bootstrap-clockpicker.js"></script>
+    <script src="~/Scripts/highlight.min.js"></script>
+    <script src="~/Scripts/jquery-clockpicker.js"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+            $('#FromTime').clockpicker();
+            $('#ToTime').clockpicker();
+            $("#DepartmentId").change(function() {
+                var departmentId = $("#DepartmentId").val();
+                $("#CourseId").empty();
+                var courses = { departmentId: departmentId };
+                $.ajax({
+                    type: "POST",
+                    url: '/Classroom/GetCourseForDepartment/',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(courses),
+                    success: function (data) {
+                        $("#CourseId").append('<option value=' + "" + '>' + "--Select Course--" + '</option>');
+                        $.each(data, function(key, value) {
+                            $("#CourseId").append('<option value='+value.Id+'>'+value.Code+'</option>');
+                        });
+                    }
+                });
+            });
+            $("#allocateClassroom").validate({
+                rules: {
+                    DepartmentId: "required",
+                    RoomId: "required",
+                    CourseId: "required",
+                    DayId: "required",
+                    FromTime: "required",
+                    ToTime: "required"
+                },
+                messages: {
+                    DepartmentId: "Please select a Department",
+                    RoomId: "Please select a room",
+                    CourseId: "Please select a course",
+                    DayId: "Please select a day",
+                    FromTime: "Please select a starting time.",
+                    ToTime: "Please select a ending time."
+                }
+            });
+        });
+    </script>
+}

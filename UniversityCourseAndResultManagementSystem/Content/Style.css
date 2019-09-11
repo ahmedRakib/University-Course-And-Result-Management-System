@@ -1,0 +1,36 @@
+﻿body {
+}
+
+
+
+
+                .story-container {
+
+                    border: 1px solid #0000ff;
+                   
+                }
+                
+                .story-content2 {
+                    width: 1000px;
+                    padding-left: 280px;
+                    padding-bottom: 50px;
+                 
+                }
+                .story-header {
+                    text-decoration: underline;
+                    padding-left: 150px;
+                }
+ 
+     
+
+
+                footer {
+                    width: 1000px;
+                    background: black;
+                    padding-top: 10px;
+                    height: 50px;
+                    color: white;
+                    text-align: center;
+                   
+                    
+                }

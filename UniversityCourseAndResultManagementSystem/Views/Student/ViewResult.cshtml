@@ -1,0 +1,112 @@
+﻿@using Microsoft.Ajax.Utilities
+
+@{
+    ViewBag.Title = "ViewResult";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section styles
+{
+    <link href="~/Content/DataTables/css/jquery.dataTables.css" rel="stylesheet" />
+}
+@*<ul class="links" style="padding-left: 20%">
+    <li>@Html.ActionLink("Save Student", "RegisterStudent", "Student")</li>
+    <li>@Html.ActionLink("Enroll in a Course", "EnrollInACourse", "Student")</li>
+    <li>@Html.ActionLink("Save Student Result", "SaveStudentResult", "Student")</li>
+    <li>@Html.ActionLink("View Result", "ViewResult", "Student")</li>
+</ul>*@
+<br/>
+<h3 align="center">View Result</h3>
+<hr/>
+@using (Html.BeginForm(null, null, FormMethod.Post, new {id = "resultForm"}))
+{
+    <table align="center">
+        <tr>
+            <td><label for="StudentId">Student Reg.No</label></td>
+            <td>
+                <select id="StudentId" name="StudentId" class="form-control">
+                    <option value="">--Select Student--</option>
+                    @foreach (var student in ViewBag.Students)
+                    {
+                        <option value=@student.Id>@student.RegistrationNo</option>
+                    }
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td><label for="Name">Name</label></td>
+            <td><input type="text" id="Name" name="Name" class="form-control" readonly /></td>
+        </tr>
+        <tr>
+            <td><label for="Email">Email</label></td>
+            <td><input type="text" id="Email" name="Email" class="form-control" readonly /></td>
+        </tr>
+        <tr>
+            <td><label for="Department">Department</label></td>
+            <td><input type="text" id="Department" name="Department" class="form-control" readonly /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Make PDF" class="btn btn-default"/></td>
+        </tr>
+    </table>
+}
+<br/>
+<table id="resultTable" class="table table-bordered table-hover">
+    <thead>
+    <tr>
+        <th>Course Code</th>
+        <th>Name</th>
+        <th>Grade</th>
+    </tr>
+    </thead>
+</table>
+
+@section scripts
+{
+    <script src="~/Scripts/jquery.validate.min.js"></script>
+    <script src="~/Scripts/DataTables/jquery.dataTables.min.js"></script>
+    <script type="text/javascript">
+        $().ready(function() {
+            var table = $("#resultTable").DataTable();
+            $("#resultTable").hide();
+            $("#StudentId").change(function () {
+                var studentId = $("#StudentId").val();
+                $("#resultTable").show();
+                table.clear().draw();
+                $("#Name").val("");
+                $("#Email").val("");
+                $("#Department").val("");
+                var studentAndCourseList = { studentId: studentId }
+                $.ajax({
+                    type: "POST",
+                    url: '/Student/GetStudentAndResult/',
+                    contentType: 'application/json; charset=utf-8',
+                    data: JSON.stringify(studentAndCourseList),
+                    success: function(data) {
+                        $("#Name").val(data.Student.Name);
+                        $("#Email").val(data.Student.Email);
+                        $("#Department").val(data.Student.DepartmentCode);
+                        $.each(data.StudentResultDetails, function (key, value) {
+                            table.row.add(
+                                [
+                                    value.CourseCode,
+                                    value.CourseName,
+                                    value.GradeLetter
+                                ]
+                            ).draw();
+                        });
+                    }
+                });
+            });
+            $("#resultForm").validate({
+                rules: {
+                    StudentId: "required"
+                },
+                messages: {
+                    StudentId: "Please Select a student."
+                }
+            });
+        });
+    </script>
+}
+
